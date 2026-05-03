@@ -1,0 +1,35 @@
+{% extends "admin_base.html" %}
+{% block title %}Manage Admins – SRMS{% endblock %}
+{% block page_title %}Manage Admins{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="page-title">🛡️ Admin Accounts</div>
+  <a href="{{ url_for('create_admin') }}" class="btn btn-primary">+ Create Admin</a>
+</div>
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in admins %}
+        <tr>
+          <td>{{ a.id }}</td>
+          <td><strong>{{ a.username }}</strong></td>
+          <td>
+            <a href="{{ url_for('delete_admin', id=a.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this admin account?');">🗑 Delete</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3" style="text-align:center;color:#94a3b8;padding:2rem;">No admins found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

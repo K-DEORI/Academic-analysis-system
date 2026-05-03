@@ -170,6 +170,52 @@ def admin_dashboard():
     conn.close()
     return render_template('admin_dashboard.html', stats=stats, notices=notices)
 
+# ── ADMIN MANAGEMENT ───────────────────────────────────────────────────────────
+
+@app.route('/admin/admins')
+@admin_required
+def manage_admins():
+    conn = get_db()
+    admins = conn.execute('SELECT id, username FROM admin ORDER BY id').fetchall()
+    conn.close()
+    return render_template('manage_admins.html', admins=admins)
+
+@app.route('/admin/admins/create', methods=['GET', 'POST'])
+@admin_required
+def create_admin():
+    if request.method == 'POST':
+        username = request.form['username'].strip()
+        password = request.form['password'].strip()
+        if username and password:
+            conn = get_db()
+            try:
+                conn.execute('INSERT INTO admin (username, password) VALUES (?,?)', (username, password))
+                conn.commit()
+                flash('Admin created successfully!', 'success')
+                conn.close()
+                return redirect(url_for('manage_admins'))
+            except sqlite3.IntegrityError:
+                flash('Username already exists.', 'danger')
+                conn.close()
+        else:
+            flash('Please fill in all fields.', 'danger')
+    return render_template('create_admin.html')
+
+@app.route('/admin/admins/delete/<int:id>')
+@admin_required
+def delete_admin(id):
+    conn = get_db()
+    admin_to_delete = conn.execute('SELECT username FROM admin WHERE id=?', (id,)).fetchone()
+    if admin_to_delete:
+        if admin_to_delete['username'] == session['admin']:
+            flash('You cannot delete your own account.', 'danger')
+        else:
+            conn.execute('DELETE FROM admin WHERE id=?', (id,))
+            conn.commit()
+            flash('Admin deleted.', 'info')
+    conn.close()
+    return redirect(url_for('manage_admins'))
+
 # ── CLASSES ────────────────────────────────────────────────────────────────────
 
 @app.route('/admin/classes')

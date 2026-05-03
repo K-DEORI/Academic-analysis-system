@@ -63,6 +63,14 @@
         <span class="nav-icon">📈</span> Analytics
       </a>
       <div class="nav-section">Account</div>
+      <div class="nav-item" onclick="toggleSub('admins-sub')" style="justify-content:space-between;">
+        <span style="display:flex;align-items:center;gap:.75rem;"><span class="nav-icon">🛡️</span>Admins</span>
+        <span>▾</span>
+      </div>
+      <div id="admins-sub" class="nav-sub">
+        <a href="{{ url_for('create_admin') }}" class="nav-item {% if request.endpoint=='create_admin' %}active{% endif %}">+ Create Admin</a>
+        <a href="{{ url_for('manage_admins') }}" class="nav-item {% if request.endpoint=='manage_admins' %}active{% endif %}">Manage Admins</a>
+      </div>
       <a href="{{ url_for('change_password') }}" class="nav-item {% if request.endpoint=='change_password' %}active{% endif %}">
         <span class="nav-icon">🔑</span> Change Password
       </a>
@@ -96,7 +104,7 @@ function toggleSub(id){
 }
 // Auto-open active section
 document.addEventListener('DOMContentLoaded',()=>{
-  ['classes-sub','subjects-sub','students-sub','results-sub','notices-sub'].forEach(id=>{
+  ['admins-sub','classes-sub','subjects-sub','students-sub','results-sub','notices-sub'].forEach(id=>{
     const sub = document.getElementById(id);
     if(sub && sub.querySelector('.active')) sub.style.display='block';
     else if(sub) sub.style.display='none';
