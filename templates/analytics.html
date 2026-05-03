@@ -1,0 +1,96 @@
+{% extends "admin_base.html" %}
+{% block title %}Analytics – SRMS{% endblock %}
+{% block page_title %}Analytics{% endblock %}
+{% block content %}
+<div class="page-title" style="margin-bottom:1.5rem;">📈 Academic Analytics</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+  <!-- Subject Averages -->
+  <div class="card">
+    <div class="card-header" style="background:#1e293b;">📚 Subject Average Marks</div>
+    <div class="card-body" style="padding:0;">
+      {% if subj_avg %}
+        {% set max_avg = subj_avg[0].avg_marks %}
+        {% for s in subj_avg %}
+        <div style="padding:.85rem 1.25rem;border-bottom:1px solid #f1f5f9;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:.35rem;">
+            <span style="font-weight:600;font-size:.9rem;">{{ s.subject_name }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#2563eb;">{{ s.avg_marks }}</span>
+          </div>
+          <div style="background:#e2e8f0;border-radius:6px;height:8px;overflow:hidden;">
+            <div style="width:{{ (s.avg_marks/100*100)|round }}%;background:linear-gradient(90deg,#2563eb,#06b6d4);height:100%;border-radius:6px;"></div>
+          </div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div style="padding:2rem;text-align:center;color:#94a3b8;">No data yet.</div>
+      {% endif %}
+    </div>
+  </div>
+  <!-- Class Performance -->
+  <div class="card">
+    <div class="card-header" style="background:#1e293b;">🏫 Class Performance</div>
+    <div class="table-wrap" style="border-radius:0;">
+      <table>
+        <thead><tr><th>Class</th><th>Section</th><th>Students</th><th>Avg %</th><th>Grade</th></tr></thead>
+        <tbody>
+          {% for c in class_perf %}
+          <tr>
+            <td><strong>{{ c.class_name }}</strong></td>
+            <td>{{ c.section }}</td>
+            <td>{{ c.student_count }}</td>
+            <td style="font-family:'JetBrains Mono',monospace;">{{ c.avg_pct }}%</td>
+            <td>
+              <span class="badge {% if c.avg_pct>=60 %}badge-success{% else %}badge-danger{% endif %}">
+                {% if c.avg_pct>=90 %}A+{% elif c.avg_pct>=80 %}A{% elif c.avg_pct>=70 %}B{% elif c.avg_pct>=60 %}C{% elif c.avg_pct>=50 %}D{% else %}F{% endif %}
+              </span>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:2rem;">No data yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- Top Performers -->
+<div class="card">
+  <div class="card-header" style="background:linear-gradient(135deg,#d97706,#f59e0b);">🏆 Top Performers</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Rank</th><th>Name</th><th>Roll ID</th><th>Class</th><th>Total Marks</th><th>Percentage</th><th>Grade</th></tr></thead>
+      <tbody>
+        {% for s in top %}
+        <tr>
+          <td>
+            {% if loop.index == 1 %}<span style="font-size:1.2rem;">🥇</span>
+            {% elif loop.index == 2 %}<span style="font-size:1.2rem;">🥈</span>
+            {% elif loop.index == 3 %}<span style="font-size:1.2rem;">🥉</span>
+            {% else %}<strong style="color:#64748b;">#{{ loop.index }}</strong>{% endif %}
+          </td>
+          <td><strong>{{ s.name }}</strong></td>
+          <td><span class="badge badge-primary" style="font-family:'JetBrains Mono',monospace;">{{ s.roll_id }}</span></td>
+          <td>{{ s.class_name }} ({{ s.section }})</td>
+          <td style="font-family:'JetBrains Mono',monospace;">{{ s.total }}/{{ s.max_marks }}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:.5rem;">
+              <div style="width:80px;background:#e2e8f0;border-radius:4px;height:6px;overflow:hidden;">
+                <div style="width:{{ s.pct }}%;background:#22c55e;height:100%;border-radius:4px;"></div>
+              </div>
+              <span style="font-family:'JetBrains Mono',monospace;font-weight:700;">{{ s.pct }}%</span>
+            </div>
+          </td>
+          <td>
+            <span class="badge {% if s.pct>=90 %}badge-success{% elif s.pct>=70 %}badge-info{% elif s.pct>=60 %}badge-warning{% else %}badge-danger{% endif %}">
+              {% if s.pct>=90 %}A+{% elif s.pct>=80 %}A{% elif s.pct>=70 %}B{% elif s.pct>=60 %}C{% elif s.pct>=50 %}D{% else %}F{% endif %}
+            </span>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:2rem;">No result data yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

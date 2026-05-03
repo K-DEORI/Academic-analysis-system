@@ -1,0 +1,29 @@
+{% extends "admin_base.html" %}
+{% block title %}Notices – SRMS{% endblock %}
+{% block page_title %}Manage Notices{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="page-title">📢 Notices</div>
+  <a href="{{ url_for('create_notice') }}" class="btn btn-primary">+ Post Notice</a>
+</div>
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Title</th><th>Content</th><th>Posted</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for n in notices %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td><strong>{{ n.title }}</strong></td>
+          <td style="color:#64748b;font-size:.85rem;max-width:300px;">{{ n.content[:100] }}{% if n.content|length>100 %}…{% endif %}</td>
+          <td style="color:#64748b;font-size:.83rem;">{{ n.created_at }}</td>
+          <td><a href="{{ url_for('delete_notice', id=n.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete?')">🗑 Delete</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:2rem;">No notices posted.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

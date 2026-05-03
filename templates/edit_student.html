@@ -1,0 +1,36 @@
+{% extends "admin_base.html" %}
+{% block title %}Edit Student – SRMS{% endblock %}
+{% block page_title %}Edit Student{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="page-title">✏ Edit Student</div>
+  <a href="{{ url_for('manage_students') }}" class="btn btn-outline">← Back</a>
+</div>
+<div class="card" style="max-width:560px;">
+  <div class="card-body">
+    <form method="POST">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" name="name" class="form-control" value="{{ student.name }}" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Roll ID</label>
+        <input type="text" name="roll_id" class="form-control" value="{{ student.roll_id }}" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Class</label>
+        <select name="class_id" class="form-control" required>
+          {% for cls in classes %}
+          <option value="{{ cls.id }}" {% if cls.id==student.class_id %}selected{% endif %}>{{ cls.class_name }} – Section {{ cls.section }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" value="{{ student.email or '' }}">
+      </div>
+      <button type="submit" class="btn btn-warning">✓ Update</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

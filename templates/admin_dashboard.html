@@ -1,0 +1,67 @@
+{% extends "admin_base.html" %}
+{% block title %}Dashboard – SRMS Admin{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="stat-grid">
+  <div class="stat-card sc-blue">
+    <div class="stat-info"><div class="stat-num">{{ stats.students }}</div><div class="stat-label">Registered Students</div></div>
+    <div class="stat-icon">👥</div>
+  </div>
+  <div class="stat-card sc-red">
+    <div class="stat-info"><div class="stat-num">{{ stats.subjects }}</div><div class="stat-label">Subjects Listed</div></div>
+    <div class="stat-icon">📚</div>
+  </div>
+  <div class="stat-card sc-yellow">
+    <div class="stat-info"><div class="stat-num">{{ stats.classes }}</div><div class="stat-label">Classes</div></div>
+    <div class="stat-icon">🏫</div>
+  </div>
+  <div class="stat-card sc-green">
+    <div class="stat-info"><div class="stat-num">{{ stats.results }}</div><div class="stat-label">Results Declared</div></div>
+    <div class="stat-icon">📋</div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;flex-wrap:wrap;">
+  <!-- Quick Actions -->
+  <div class="card">
+    <div class="card-header" style="background:#1e293b;">⚡ Quick Actions</div>
+    <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+      <a href="{{ url_for('create_student') }}" class="btn btn-primary" style="justify-content:center;">+ Add Student</a>
+      <a href="{{ url_for('create_class') }}" class="btn btn-info" style="justify-content:center;">+ Create Class</a>
+      <a href="{{ url_for('create_subject') }}" class="btn btn-warning" style="justify-content:center;">+ Add Subject</a>
+      <a href="{{ url_for('manage_results') }}" class="btn btn-success" style="justify-content:center;">📋 Results</a>
+      <a href="{{ url_for('create_notice') }}" class="btn btn-outline" style="justify-content:center;">📢 Notice</a>
+      <a href="{{ url_for('analytics') }}" class="btn btn-outline" style="justify-content:center;">📈 Analytics</a>
+    </div>
+  </div>
+  <!-- Recent Notices -->
+  <div class="card">
+    <div class="card-header" style="background:#1e293b;">📢 Recent Notices</div>
+    <div class="card-body" style="padding:0;">
+      {% if notices %}
+        {% for n in notices %}
+        <div style="padding:.85rem 1.25rem;border-bottom:1px solid #f1f5f9;">
+          <div style="font-weight:600;font-size:.9rem;color:#0f172a;">{{ n.title }}</div>
+          <div style="font-size:.8rem;color:#64748b;margin-top:.2rem;">{{ n.content[:80] }}{% if n.content|length > 80 %}…{% endif %}</div>
+          <div style="font-size:.75rem;color:#94a3b8;margin-top:.25rem;">{{ n.created_at }}</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div style="padding:2rem;text-align:center;color:#94a3b8;">No notices yet.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:1.5rem;" class="card">
+  <div class="card-header" style="background:#1e293b;">🎓 Student Result Management System</div>
+  <div class="card-body" style="background:linear-gradient(135deg,#0f172a,#1e3a5f);border-radius:0 0 12px 12px;padding:3rem;text-align:center;">
+    <div style="font-size:3rem;font-weight:900;color:#fff;line-height:1.1;">Student Result<br><span style="color:#60a5fa;">Management System</span></div>
+    <p style="color:#94a3b8;margin-top:1rem;">Manage and view results efficiently</p>
+    <div style="margin-top:1.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+      <a href="{{ url_for('student_result') }}" class="btn" style="background:#2563eb;color:#fff;">View Student Portal</a>
+      <a href="{{ url_for('analytics') }}" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3);">📈 Analytics</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

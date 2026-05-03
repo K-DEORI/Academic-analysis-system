@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span style="font-size:1.5rem;">🏫</span>
+      <div>
+        <div class="brand-text">SRMS</div>
+        <div class="brand-sub">Admin Panel</div>
+      </div>
+    </div>
+    <div class="sidebar-avatar">👨‍💼</div>
+    <div class="sidebar-admin-name">Admin</div>
+    <div class="sidebar-admin-role">Administrator</div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Main</div>
+      <a href="{{ url_for('admin_dashboard') }}" class="nav-item {% if request.endpoint=='admin_dashboard' %}active{% endif %}">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <div class="nav-section">Management</div>
+      <div class="nav-item" onclick="toggleSub('classes-sub')" style="justify-content:space-between;">
+        <span style="display:flex;align-items:center;gap:.75rem;"><span class="nav-icon">🏫</span>Classes</span>
+        <span>▾</span>
+      </div>
+      <div id="classes-sub" class="nav-sub">
+        <a href="{{ url_for('create_class') }}" class="nav-item {% if request.endpoint=='create_class' %}active{% endif %}">+ Create Class</a>
+        <a href="{{ url_for('manage_classes') }}" class="nav-item {% if request.endpoint=='manage_classes' %}active{% endif %}">Manage Classes</a>
+      </div>
+      <div class="nav-item" onclick="toggleSub('subjects-sub')" style="justify-content:space-between;">
+        <span style="display:flex;align-items:center;gap:.75rem;"><span class="nav-icon">📚</span>Subjects</span>
+        <span>▾</span>
+      </div>
+      <div id="subjects-sub" class="nav-sub">
+        <a href="{{ url_for('create_subject') }}" class="nav-item {% if request.endpoint=='create_subject' %}active{% endif %}">+ Create Subject</a>
+        <a href="{{ url_for('manage_subjects') }}" class="nav-item {% if request.endpoint=='manage_subjects' %}active{% endif %}">Manage Subjects</a>
+      </div>
+      <div class="nav-item" onclick="toggleSub('students-sub')" style="justify-content:space-between;">
+        <span style="display:flex;align-items:center;gap:.75rem;"><span class="nav-icon">🎓</span>Students</span>
+        <span>▾</span>
+      </div>
+      <div id="students-sub" class="nav-sub">
+        <a href="{{ url_for('create_student') }}" class="nav-item {% if request.endpoint=='create_student' %}active{% endif %}">+ Add Student</a>
+        <a href="{{ url_for('manage_students') }}" class="nav-item {% if request.endpoint=='manage_students' %}active{% endif %}">Manage Students</a>
+      </div>
+      <div class="nav-item" onclick="toggleSub('results-sub')" style="justify-content:space-between;">
+        <span style="display:flex;align-items:center;gap:.75rem;"><span class="nav-icon">📋</span>Results</span>
+        <span>▾</span>
+      </div>
+      <div id="results-sub" class="nav-sub">
+        <a href="{{ url_for('manage_results') }}" class="nav-item {% if request.endpoint in ['manage_results','add_result'] %}active{% endif %}">Declare Results</a>
+      </div>
+      <div class="nav-item" onclick="toggleSub('notices-sub')" style="justify-content:space-between;">
+        <span style="display:flex;align-items:center;gap:.75rem;"><span class="nav-icon">📢</span>Notices</span>
+        <span>▾</span>
+      </div>
+      <div id="notices-sub" class="nav-sub">
+        <a href="{{ url_for('create_notice') }}" class="nav-item">+ Post Notice</a>
+        <a href="{{ url_for('manage_notices') }}" class="nav-item">Manage Notices</a>
+      </div>
+      <div class="nav-section">Analytics</div>
+      <a href="{{ url_for('analytics') }}" class="nav-item {% if request.endpoint=='analytics' %}active{% endif %}">
+        <span class="nav-icon">📈</span> Analytics
+      </a>
+      <div class="nav-section">Account</div>
+      <a href="{{ url_for('change_password') }}" class="nav-item {% if request.endpoint=='change_password' %}active{% endif %}">
+        <span class="nav-icon">🔑</span> Change Password
+      </a>
+    </nav>
+  </aside>
+  <!-- MAIN -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div class="topbar-title">{% block page_title %}Dashboard{% endblock %}</div>
+      <div class="topbar-actions">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-warning btn-sm">🏠 Dashboard</a>
+        <a href="{{ url_for('admin_logout') }}" class="btn btn-danger btn-sm">⏏ Logout</a>
+      </div>
+    </div>
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% if msgs %}
+        <div class="flash-msgs">
+          {% for cat, msg in msgs %}
+            <div class="flash flash-{{ cat }}">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <div class="admin-content">{% block content %}{% endblock %}</div>
+  </div>
+</div>
+<script>
+function toggleSub(id){
+  const el = document.getElementById(id);
+  el.style.display = el.style.display==='none' ? 'block' : 'none';
+}
+// Auto-open active section
+document.addEventListener('DOMContentLoaded',()=>{
+  ['classes-sub','subjects-sub','students-sub','results-sub','notices-sub'].forEach(id=>{
+    const sub = document.getElementById(id);
+    if(sub && sub.querySelector('.active')) sub.style.display='block';
+    else if(sub) sub.style.display='none';
+  });
+});
+</script>
+{% block extra_js %}{% endblock %}
+{% endblock %}

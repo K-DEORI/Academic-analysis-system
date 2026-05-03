@@ -1,0 +1,31 @@
+{% extends "admin_base.html" %}
+{% block title %}Create Class – SRMS{% endblock %}
+{% block page_title %}Create Class{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="page-title">🏫 Create Student Class</div>
+  <a href="{{ url_for('manage_classes') }}" class="btn btn-outline">← Back</a>
+</div>
+<div class="card" style="max-width:560px;">
+  <div class="card-body">
+    <form method="POST">
+      <div class="form-group">
+        <label class="form-label">Class Name</label>
+        <input type="text" name="class_name" class="form-control" placeholder="e.g., First, Second, Sixth" required>
+        <div class="form-hint">e.g., First, Second, Sixth</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Class Name in Numeric</label>
+        <input type="number" name="class_numeric" class="form-control" placeholder="e.g., 1, 2, 6" required>
+        <div class="form-hint">e.g., 1, 2, 6</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Section</label>
+        <input type="text" name="section" class="form-control" placeholder="e.g., A, B, C" required>
+        <div class="form-hint">e.g., A, B, C</div>
+      </div>
+      <button type="submit" class="btn btn-success">✓ Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

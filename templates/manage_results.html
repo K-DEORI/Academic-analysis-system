@@ -1,0 +1,28 @@
+{% extends "admin_base.html" %}
+{% block title %}Results – SRMS{% endblock %}
+{% block page_title %}Declare Results{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="page-title">📋 Student Results</div>
+</div>
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Student Name</th><th>Roll ID</th><th>Class</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td><strong>{{ s.name }}</strong></td>
+          <td><span class="badge badge-primary" style="font-family:'JetBrains Mono',monospace;">{{ s.roll_id }}</span></td>
+          <td>{{ s.class_name }} ({{ s.section }})</td>
+          <td><a href="{{ url_for('add_result', student_id=s.id) }}" class="btn btn-primary btn-sm">📋 Manage Results</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:2rem;">No students registered yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

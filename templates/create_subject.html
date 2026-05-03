@@ -1,0 +1,25 @@
+{% extends "admin_base.html" %}
+{% block title %}Create Subject – SRMS{% endblock %}
+{% block page_title %}Create Subject{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="page-title">📚 Create Subject</div>
+  <a href="{{ url_for('manage_subjects') }}" class="btn btn-outline">← Back</a>
+</div>
+<div class="card" style="max-width:520px;">
+  <div class="card-body">
+    <form method="POST">
+      <div class="form-group">
+        <label class="form-label">Subject Name</label>
+        <input type="text" name="subject_name" class="form-control" placeholder="e.g., Mathematics, Science" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject Code</label>
+        <input type="text" name="subject_code" class="form-control" placeholder="e.g., MTH101, SCI101" required>
+        <div class="form-hint">Must be unique</div>
+      </div>
+      <button type="submit" class="btn btn-success">✓ Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

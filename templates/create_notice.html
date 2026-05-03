@@ -1,0 +1,24 @@
+{% extends "admin_base.html" %}
+{% block title %}Post Notice – SRMS{% endblock %}
+{% block page_title %}Post Notice{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="page-title">📢 Post Notice</div>
+  <a href="{{ url_for('manage_notices') }}" class="btn btn-outline">← Back</a>
+</div>
+<div class="card" style="max-width:600px;">
+  <div class="card-body">
+    <form method="POST">
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" name="title" class="form-control" placeholder="Notice title" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Content</label>
+        <textarea name="content" class="form-control" rows="5" placeholder="Notice content..." required style="resize:vertical;"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">📢 Post Notice</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "admin_base.html" %}
+{% block title %}Manage Students – SRMS{% endblock %}
+{% block page_title %}Manage Students{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="page-title">🎓 Students</div>
+  <a href="{{ url_for('create_student') }}" class="btn btn-primary">+ Add Student</a>
+</div>
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Name</th><th>Roll ID</th><th>Class</th><th>Email</th><th>Joined</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td><strong>{{ s.name }}</strong></td>
+          <td><span class="badge badge-primary" style="font-family:'JetBrains Mono',monospace;">{{ s.roll_id }}</span></td>
+          <td>{{ s.class_name }} ({{ s.section }})</td>
+          <td style="color:#64748b;font-size:.85rem;">{{ s.email or '—' }}</td>
+          <td style="color:#64748b;font-size:.83rem;">{{ s.created_at }}</td>
+          <td>
+            <a href="{{ url_for('add_result', student_id=s.id) }}" class="btn btn-success btn-sm">📋 Results</a>
+            <a href="{{ url_for('edit_student', id=s.id) }}" class="btn btn-warning btn-sm">✏ Edit</a>
+            <a href="{{ url_for('delete_student', id=s.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete student?')">🗑</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:2rem;">No students yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

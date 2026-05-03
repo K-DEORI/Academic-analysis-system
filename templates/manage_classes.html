@@ -1,0 +1,33 @@
+{% extends "admin_base.html" %}
+{% block title %}Manage Classes – SRMS{% endblock %}
+{% block page_title %}Manage Classes{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="page-title">🏫 Classes</div>
+  <a href="{{ url_for('create_class') }}" class="btn btn-primary">+ Create Class</a>
+</div>
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>#</th><th>Class Name</th><th>Numeric</th><th>Section</th><th>Created</th><th>Action</th></tr></thead>
+      <tbody>
+        {% for cls in classes %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td><strong>{{ cls.class_name }}</strong></td>
+          <td><span class="badge badge-info">{{ cls.class_numeric }}</span></td>
+          <td><span class="badge badge-primary">{{ cls.section }}</span></td>
+          <td style="color:#64748b;font-size:.83rem;">{{ cls.created_at }}</td>
+          <td>
+            <a href="{{ url_for('edit_class', id=cls.id) }}" class="btn btn-warning btn-sm">✏ Edit</a>
+            <a href="{{ url_for('delete_class', id=cls.id) }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this class?')">🗑 Delete</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" style="text-align:center;color:#94a3b8;padding:2rem;">No classes yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

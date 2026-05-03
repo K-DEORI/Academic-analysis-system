@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}Student Result – SRMS{% endblock %}
+{% block extra_css %}
+<style>
+.result-page{min-height:calc(100vh - 60px);padding:3rem 1rem;display:flex;flex-direction:column;align-items:center;background:linear-gradient(135deg,#f0f9ff 0%,#e0f2fe 100%);}
+.search-card{width:100%;max-width:520px;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.12);}
+.search-card .card-header{font-size:1.15rem;}
+.result-card{width:100%;max-width:700px;margin-top:2rem;}
+.result-header{background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff;padding:1.5rem;border-radius:16px 16px 0 0;display:flex;align-items:center;gap:.75rem;font-size:1.2rem;font-weight:700;}
+.student-info{padding:1.25rem 1.5rem;border-bottom:1px solid #e2e8f0;display:flex;flex-wrap:wrap;gap:1rem;}
+.info-item{flex:1;min-width:160px;}
+.info-label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#64748b;}
+.info-value{font-size:1rem;font-weight:600;color:#0f172a;margin-top:.2rem;}
+.grade-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.4rem 1rem;border-radius:20px;font-size:.85rem;font-weight:700;}
+.grade-A-plus{background:#dcfce7;color:#166534;}
+.grade-A{background:#d1fae5;color:#065f46;}
+.grade-B{background:#dbeafe;color:#1e40af;}
+.grade-C{background:#fef9c3;color:#854d0e;}
+.grade-D{background:#fed7aa;color:#9a3412;}
+.grade-F{background:#fee2e2;color:#991b1b;}
+.marks-row{display:flex;justify-content:space-between;align-items:center;padding:.85rem 1.5rem;border-bottom:1px solid #f1f5f9;transition:background .15s;}
+.marks-row:hover{background:#f8fafc;}
+.marks-row:last-child{border-bottom:none;}
+.subject-name{font-weight:600;color:#1e293b;}
+.marks-badge{background:#dbeafe;color:#1e40af;padding:.2rem .75rem;border-radius:20px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+.summary-row{background:#f8fafc;padding:1rem 1.5rem;display:flex;justify-content:space-between;border-top:2px solid #e2e8f0;}
+.summary-item{text-align:center;}
+.summary-label{font-size:.75rem;font-weight:700;text-transform:uppercase;color:#64748b;}
+.summary-value{font-size:1.25rem;font-weight:800;color:#0f172a;font-family:'JetBrains Mono',monospace;}
+.progress-bar-wrap{background:#e2e8f0;border-radius:10px;height:10px;margin-top:.75rem;overflow:hidden;}
+.progress-bar{height:100%;border-radius:10px;background:linear-gradient(90deg,#2563eb,#06b6d4);transition:width 1s ease;}
+.print-btn{margin-top:1rem;display:flex;justify-content:flex-end;gap:.75rem;}
+@media print{.pub-nav,.print-btn,.search-card{display:none!important;}.result-card{max-width:100%;box-shadow:none;}}
+</style>
+{% endblock %}
+{% block body %}
+<nav class="pub-nav">
+  <div class="logo"><span>SRMS</span></div>
+  <div class="pub-nav-links">
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('student_result') }}" class="active">Student Result</a>
+    <a href="{{ url_for('admin_login') }}">Admin</a>
+  </div>
+</nav>
+<div class="result-page">
+  <div class="search-card card">
+    <div class="card-header">🎓 Student Result Management System</div>
+    <div class="card-body">
+      {% if error %}
+        <div class="alert alert-danger">⚠️ {{ error }}</div>
+      {% endif %}
+      <form method="POST">
+        <div class="form-group">
+          <label class="form-label">Enter your Roll Id</label>
+          <input type="text" name="roll_id" class="form-control" placeholder="Enter Your Roll Id" required value="{{ request.form.get('roll_id','') }}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Class</label>
+          <select name="class_id" class="form-control" required>
+            <option value="">Select Class</option>
+            {% for cls in classes %}
+              <option value="{{ cls.id }}" {% if request.form.get('class_id')==cls.id|string %}selected{% endif %}>
+                {{ cls.class_name }} – Section {{ cls.section }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <a href="{{ url_for('home') }}" class="btn btn-outline" style="padding:.6rem 1.25rem;">🏠 Back to Home</a>
+          <button type="submit" class="btn btn-success">✓ Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  {% if result %}
+  <div class="result-card" id="result-card">
+    <div class="result-header">🎓 Student Result Details</div>
+    <div style="background:#fff;border:1px solid #e2e8f0;border-top:none;border-radius:0 0 16px 16px;overflow:hidden;">
+      <div class="student-info">
+        <div class="info-item"><div class="info-label">Student Name</div><div class="info-value">{{ result.student.name }}</div></div>
+        <div class="info-item"><div class="info-label">Roll ID</div><div class="info-value" style="font-family:'JetBrains Mono',monospace;">{{ result.student.roll_id }}</div></div>
+        <div class="info-item"><div class="info-label">Class</div><div class="info-value">{{ result.student.class_name }} ({{ result.student.section }})</div></div>
+        <div class="info-item">
+          <div class="info-label">Grade</div>
+          <div class="info-value">
+            <span class="grade-badge grade-{{ result.grade[0]|replace('+','-plus') }}">
+              {{ result.grade[0] }} – {{ result.grade[1] }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div style="padding:.5rem 1.5rem 0;"><div class="info-label" style="padding:.5rem 0;">Subject Results</div></div>
+      {% for r in result.results %}
+        <div class="marks-row">
+          <div>
+            <span style="color:#94a3b8;font-size:.8rem;font-family:'JetBrains Mono',monospace;margin-right:.75rem;">{{ loop.index }}</span>
+            <span class="subject-name">{{ r.subject_name }}</span>
+          </div>
+          <span class="marks-badge">{{ r.marks }} / {{ r.total_marks }}</span>
+        </div>
+      {% endfor %}
+      <div class="summary-row">
+        <div class="summary-item">
+          <div class="summary-label">Total Marks</div>
+          <div class="summary-value">{{ result.total_obtained }} / {{ result.total_max }}</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Percentage</div>
+          <div class="summary-value">{{ result.percentage }}%</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-label">Grade</div>
+          <div class="summary-value">{{ result.grade[0] }}</div>
+        </div>
+      </div>
+      <div style="padding:1rem 1.5rem;">
+        <div class="info-label" style="margin-bottom:.35rem;">Performance</div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar" id="pbar" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+    <div class="print-btn">
+      <a href="{{ url_for('student_result') }}" class="btn btn-outline">← Back to Search</a>
+      <button onclick="window.print()" class="btn btn-primary">🖨 Print Result</button>
+    </div>
+  </div>
+  <script>
+    setTimeout(()=>{ document.getElementById('pbar').style.width='{{ result.percentage }}%'; }, 300);
+  </script>
+  {% endif %}
+</div>
+{% endblock %}

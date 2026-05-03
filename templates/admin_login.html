@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Admin Login – SRMS{% endblock %}
+{% block extra_css %}
+<style>
+.login-page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#f0f2f7,#dbeafe);padding:2rem;}
+.login-card{width:100%;max-width:440px;border-radius:20px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.15);}
+.login-header{background:#1e293b;padding:2rem;text-align:center;}
+.login-header h2{color:#fff;font-size:1.4rem;font-weight:800;display:flex;align-items:center;justify-content:center;gap:.5rem;}
+.login-header p{color:#94a3b8;font-size:.85rem;margin-top:.35rem;}
+.login-body{background:#fff;padding:2rem;}
+.btn-login{width:100%;padding:.85rem;font-size:1rem;margin-top:.5rem;justify-content:center;}
+.back-link{text-align:center;margin-top:1.5rem;color:#64748b;font-size:.875rem;}
+.back-link a{color:#2563eb;font-weight:600;}
+</style>
+{% endblock %}
+{% block body %}
+<nav class="pub-nav">
+  <div class="logo"><span>SRMS</span></div>
+  <div class="pub-nav-links">
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('student_result') }}">Student Result</a>
+    <a href="{{ url_for('admin_login') }}" class="active">Admin</a>
+  </div>
+</nav>
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-header">
+      <h2>👤 Admin Login</h2>
+      <p>Sign in to access the admin panel</p>
+    </div>
+    <div class="login-body">
+      {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+      {% endif %}
+      <form method="POST">
+        <div class="form-group">
+          <label class="form-label">👤 Username</label>
+          <input type="text" name="username" class="form-control" placeholder="Enter username" required value="admin">
+        </div>
+        <div class="form-group">
+          <label class="form-label">🔒 Password</label>
+          <input type="password" name="password" class="form-control" placeholder="Enter password" required>
+        </div>
+        <button type="submit" class="btn btn-success btn-login">➜ Login</button>
+      </form>
+    </div>
+  </div>
+  <div class="back-link"><a href="{{ url_for('home') }}">🏠 Back to Home</a></div>
+</div>
+{% endblock %}

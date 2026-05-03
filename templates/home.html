@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}SRMS – Student Result Management System{% endblock %}
+{% block extra_css %}
+<style>
+.hero{min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;padding:2rem;background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#0f172a 100%);position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 20% 50%,rgba(37,99,235,.15) 0%,transparent 50%),radial-gradient(circle at 80% 20%,rgba(14,165,233,.1) 0%,transparent 50%);pointer-events:none;}
+.hero-content{text-align:center;max-width:700px;z-index:1;animation:fadeUp .8s ease both;}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(37,99,235,.2);border:1px solid rgba(37,99,235,.4);color:#93c5fd;padding:.4rem 1rem;border-radius:20px;font-size:.85rem;font-weight:600;margin-bottom:1.5rem;}
+.hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:800;color:#fff;line-height:1.15;margin-bottom:1rem;}
+.hero h1 span{color:#60a5fa;}
+.hero p{color:#94a3b8;font-size:1.1rem;line-height:1.7;margin-bottom:2.5rem;}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.hero-btns .btn{padding:.85rem 2rem;font-size:1rem;}
+.features{padding:5rem 2rem;background:#f8fafc;}
+.features-grid{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.5rem;}
+.features h2{text-align:center;font-size:2rem;font-weight:800;margin-bottom:.5rem;color:#0f172a;}
+.features .sub{text-align:center;color:#64748b;margin-bottom:3rem;}
+.feat-card{background:#fff;border-radius:16px;padding:1.75rem;border:1px solid #e2e8f0;transition:transform .2s,box-shadow .2s;}
+.feat-card:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.08);}
+.feat-icon{font-size:2.5rem;margin-bottom:1rem;}
+.feat-card h3{font-size:1.05rem;font-weight:700;margin-bottom:.5rem;color:#0f172a;}
+.feat-card p{font-size:.875rem;color:#64748b;line-height:1.6;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+</style>
+{% endblock %}
+{% block body %}
+<nav class="pub-nav">
+  <div class="logo"><span>SRMS</span></div>
+  <div class="pub-nav-links">
+    <a href="{{ url_for('home') }}" class="active">Home</a>
+    <a href="{{ url_for('student_result') }}">Student Result</a>
+    <a href="{{ url_for('admin_login') }}">Admin</a>
+  </div>
+</nav>
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🎓 Academic Management</div>
+    <h1>Student Result<br><span>Management System</span></h1>
+    <p>A comprehensive platform for managing student results, classes, subjects, and academic performance analytics. Built for educators and students.</p>
+    <div class="hero-btns">
+      <a href="{{ url_for('student_result') }}" class="btn btn-primary">📊 Check Result</a>
+      <a href="{{ url_for('admin_login') }}" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3);">🔐 Admin Login</a>
+    </div>
+  </div>
+</section>
+<section class="features">
+  <h2>Everything You Need</h2>
+  <p class="sub">Manage your school's academic data all in one place</p>
+  <div class="features-grid">
+    <div class="feat-card"><div class="feat-icon">🏫</div><h3>Class Management</h3><p>Create and manage classes with sections. Organize students by grade and section effortlessly.</p></div>
+    <div class="feat-card"><div class="feat-icon">📚</div><h3>Subject Tracking</h3><p>Add subjects with unique codes. Track performance across all subjects.</p></div>
+    <div class="feat-card"><div class="feat-icon">🎓</div><h3>Student Profiles</h3><p>Maintain detailed student records with roll IDs, class assignments, and contact info.</p></div>
+    <div class="feat-card"><div class="feat-icon">📋</div><h3>Result Declaration</h3><p>Enter marks per subject, auto-calculate totals, percentages and grades.</p></div>
+    <div class="feat-card"><div class="feat-icon">📈</div><h3>Analytics Dashboard</h3><p>View top performers, subject averages, and class-wise performance insights.</p></div>
+    <div class="feat-card"><div class="feat-icon">📢</div><h3>Notices</h3><p>Post and manage school notices for announcements and updates.</p></div>
+  </div>
+</section>
+{% endblock %}
