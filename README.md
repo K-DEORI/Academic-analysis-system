@@ -32,7 +32,11 @@ Then visit: **http://localhost:5000**
 - **Analytics** — Top performers leaderboard, subject averages, class-wise performance
 - **Change Password**
 
+## 🛠️ Tech Stack
 
+- **Backend:** Python, Flask
+- **Database:** SQLite
+- **Frontend:** HTML5, CSS3, Jinja2 template
 
 ## 📁 Structure
 
