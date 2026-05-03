@@ -32,6 +32,8 @@ Then visit: **http://localhost:5000**
 - **Analytics** — Top performers leaderboard, subject averages, class-wise performance
 - **Change Password**
 
+
+
 ## 📁 Structure
 
 ```
