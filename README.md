@@ -36,7 +36,7 @@ Then visit: **http://localhost:5000**
 
 - **Backend:** Python, Flask
 - **Database:** SQLite
-- **Frontend:** HTML5, CSS3, Jinja2 templates
+- **Frontend:** HTML5, CSS3, Jinja2 template
 
 ## 📁 Structure
 
