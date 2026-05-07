@@ -82,6 +82,13 @@ def admin_required(f):
 def home():
     return render_template('home.html')
 
+@app.route('/public-notices')
+def public_notices():
+    conn = get_db()
+    notices = conn.execute('SELECT * FROM notices ORDER BY created_at DESC').fetchall()
+    conn.close()
+    return render_template('public_notices.html', notices=notices)
+
 @app.route('/student-result', methods=['GET', 'POST'])
 def student_result():
     conn = get_db()
@@ -529,8 +536,8 @@ def analytics():
         SELECT c.class_name, c.section, COUNT(DISTINCT s.id) as student_count,
                ROUND(AVG(r.marks*100.0/r.total_marks),2) as avg_pct
         FROM classes c
-        JOIN students s ON s.class_id=c.id
-        JOIN results r ON r.student_id=s.id
+        LEFT JOIN students s ON s.class_id=c.id
+        LEFT JOIN results r ON r.student_id=s.id
         GROUP BY c.id
     ''').fetchall()
     conn.close()

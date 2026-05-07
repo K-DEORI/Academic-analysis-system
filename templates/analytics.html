@@ -1,93 +1,242 @@
 {% extends "admin_base.html" %}
 {% block title %}Analytics – SRMS{% endblock %}
 {% block page_title %}Analytics{% endblock %}
+
+{% block extra_css %}
+<style>
+  .analytics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .analytics-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+  }
+
+  .clean-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+  }
+
+  .clean-card-header {
+    background: #ffffff;
+    padding: 1.25rem 1.75rem;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .clean-card-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .clean-table th {
+    background: #f8fafc;
+    padding: 1rem 1.75rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: left;
+  }
+
+  .clean-table td {
+    padding: 1rem 1.75rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    font-size: 0.95rem;
+  }
+
+  .clean-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .clean-table tr:hover td {
+    background: #f8fafc;
+  }
+
+  .subject-bar-container {
+    background: #f1f5f9;
+    border-radius: 6px;
+    height: 8px;
+    overflow: hidden;
+    margin-top: 0.6rem;
+  }
+
+  .subject-bar-fill {
+    background: linear-gradient(90deg, #3b82f6, #06b6d4);
+    height: 100%;
+    border-radius: 6px;
+  }
+
+  @media(max-width: 1024px) {
+    .analytics-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="page-title" style="margin-bottom:1.5rem;">📈 Academic Analytics</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;">
+<div class="analytics-header">
+  <h1 class="analytics-title">ACADEMIC ANALYTICS</h1>
+</div>
+
+<div class="analytics-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem;">
   <!-- Subject Averages -->
-  <div class="card">
-    <div class="card-header" style="background:#1e293b;">📚 Subject Average Marks</div>
-    <div class="card-body" style="padding:0;">
+  <div class="clean-card" style="margin-bottom:0;">
+    <div class="clean-card-header">
+      <h3 class="clean-card-title">Subject Averages</h3>
+    </div>
+    <div style="padding:0;">
       {% if subj_avg %}
-        {% set max_avg = subj_avg[0].avg_marks %}
-        {% for s in subj_avg %}
-        <div style="padding:.85rem 1.25rem;border-bottom:1px solid #f1f5f9;">
-          <div style="display:flex;justify-content:space-between;margin-bottom:.35rem;">
-            <span style="font-weight:600;font-size:.9rem;">{{ s.subject_name }}</span>
-            <span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:#2563eb;">{{ s.avg_marks }}</span>
-          </div>
-          <div style="background:#e2e8f0;border-radius:6px;height:8px;overflow:hidden;">
-            <div style="width:{{ (s.avg_marks/100*100)|round }}%;background:linear-gradient(90deg,#2563eb,#06b6d4);height:100%;border-radius:6px;"></div>
-          </div>
+      {% for s in subj_avg %}
+      <div style="padding:1.25rem 1.75rem; border-bottom:1px solid #f1f5f9;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-weight:600;font-size:1rem;color:#0f172a;">{{ s.subject_name }}</span>
+          <span style="font-family:'Outfit',sans-serif;font-weight:700;color:#2563eb;font-size:1.15rem;">{{ s.avg_marks
+            }}</span>
         </div>
-        {% endfor %}
+        <div class="subject-bar-container">
+          <div class="subject-bar-fill" style="width:{{ (s.avg_marks/100*100)|round }}%;"></div>
+        </div>
+      </div>
+      {% endfor %}
       {% else %}
-        <div style="padding:2rem;text-align:center;color:#94a3b8;">No data yet.</div>
+      <div style="padding:4rem 2rem;text-align:center;color:#94a3b8;">
+        <div style="font-size:2.5rem;margin-bottom:0.75rem;opacity:0.4;">📊</div>
+        No subject data available.
+      </div>
       {% endif %}
     </div>
   </div>
+
   <!-- Class Performance -->
-  <div class="card">
-    <div class="card-header" style="background:#1e293b;">🏫 Class Performance</div>
-    <div class="table-wrap" style="border-radius:0;">
-      <table>
-        <thead><tr><th>Class</th><th>Section</th><th>Students</th><th>Avg %</th><th>Grade</th></tr></thead>
+  <div class="clean-card" style="margin-bottom:0;">
+    <div class="clean-card-header">
+      <h3 class="clean-card-title">Class Performance</h3>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="clean-table" style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th>Class</th>
+            <th>Students</th>
+            <th>Avg %</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
         <tbody>
           {% for c in class_perf %}
           <tr>
-            <td><strong>{{ c.class_name }}</strong></td>
-            <td>{{ c.section }}</td>
-            <td>{{ c.student_count }}</td>
-            <td style="font-family:'JetBrains Mono',monospace;">{{ c.avg_pct }}%</td>
             <td>
-              <span class="badge {% if c.avg_pct>=60 %}badge-success{% else %}badge-danger{% endif %}">
-                {% if c.avg_pct>=90 %}A+{% elif c.avg_pct>=80 %}A{% elif c.avg_pct>=70 %}B{% elif c.avg_pct>=60 %}C{% elif c.avg_pct>=50 %}D{% else %}F{% endif %}
+              <strong style="color:#0f172a;">{{ c.class_name }}</strong>
+              <span style="color:#64748b;font-size:0.85rem;margin-left:0.25rem;">({{ c.section }})</span>
+            </td>
+            <td>{{ c.student_count }}</td>
+            {% if c.avg_pct is not none %}
+            <td style="font-family:'JetBrains Mono',monospace;font-weight:600;">{{ c.avg_pct }}%</td>
+            <td>
+              <span class="badge {% if c.avg_pct>=60 %}badge-success{% else %}badge-danger{% endif %}"
+                style="padding:0.3rem 0.75rem;">
+                {% if c.avg_pct>=90 %}A+{% elif c.avg_pct>=80 %}A{% elif c.avg_pct>=70 %}B{% elif c.avg_pct>=60 %}C{%
+                elif c.avg_pct>=50 %}D{% else %}F{% endif %}
               </span>
             </td>
+            {% else %}
+            <td style="font-family:'JetBrains Mono',monospace; color:#94a3b8;">N/A</td>
+            <td><span class="badge" style="background:#f1f5f9; color:#64748b; padding:0.3rem 0.75rem;">N/A</span></td>
+            {% endif %}
           </tr>
           {% else %}
-          <tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:2rem;">No data yet.</td></tr>
+          <tr>
+            <td colspan="4" style="text-align:center;color:#94a3b8;padding:4rem;">No class data available.</td>
+          </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
   </div>
 </div>
+
 <!-- Top Performers -->
-<div class="card">
-  <div class="card-header" style="background:linear-gradient(135deg,#d97706,#f59e0b);">🏆 Top Performers</div>
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Rank</th><th>Name</th><th>Roll ID</th><th>Class</th><th>Total Marks</th><th>Percentage</th><th>Grade</th></tr></thead>
+<div class="clean-card">
+  <div class="clean-card-header">
+    <h3 class="clean-card-title">Top Performers</h3>
+  </div>
+  <div style="overflow-x:auto;">
+    <table class="clean-table" style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Student</th>
+          <th>Class</th>
+          <th>Score</th>
+          <th>Percentage</th>
+          <th>Grade</th>
+        </tr>
+      </thead>
       <tbody>
         {% for s in top %}
         <tr>
-          <td>
-            {% if loop.index == 1 %}<span style="font-size:1.2rem;">🥇</span>
-            {% elif loop.index == 2 %}<span style="font-size:1.2rem;">🥈</span>
-            {% elif loop.index == 3 %}<span style="font-size:1.2rem;">🥉</span>
-            {% else %}<strong style="color:#64748b;">#{{ loop.index }}</strong>{% endif %}
+          <td style="font-family:'Outfit',sans-serif;font-weight:800;font-size:1.1rem;color:#cbd5e1;">
+            {% if loop.index == 1 %}<span style="font-size:1.4rem;">🥇</span>
+            {% elif loop.index == 2 %}<span style="font-size:1.4rem;">🥈</span>
+            {% elif loop.index == 3 %}<span style="font-size:1.4rem;">🥉</span>
+            {% else %}#{{ loop.index }}{% endif %}
           </td>
-          <td><strong>{{ s.name }}</strong></td>
-          <td><span class="badge badge-primary" style="font-family:'JetBrains Mono',monospace;">{{ s.roll_id }}</span></td>
-          <td>{{ s.class_name }} ({{ s.section }})</td>
-          <td style="font-family:'JetBrains Mono',monospace;">{{ s.total }}/{{ s.max_marks }}</td>
           <td>
-            <div style="display:flex;align-items:center;gap:.5rem;">
-              <div style="width:80px;background:#e2e8f0;border-radius:4px;height:6px;overflow:hidden;">
+            <div style="font-weight:700;color:#0f172a;margin-bottom:0.15rem;">{{ s.name }}</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;color:#64748b;">ID: {{ s.roll_id }}
+            </div>
+          </td>
+          <td>{{ s.class_name }} <span style="color:#64748b;font-size:0.85rem;">({{ s.section }})</span></td>
+          <td style="font-family:'JetBrains Mono',monospace;font-weight:600;color:#334155;">{{ s.total }}<span
+              style="color:#94a3b8;font-weight:400;font-size:0.8rem;">/{{ s.max_marks }}</span></td>
+          <td>
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+              <span
+                style="font-family:'Outfit',sans-serif;font-weight:700;font-size:1.05rem;color:#0f172a;width:3rem;">{{
+                s.pct }}%</span>
+              <div style="flex:1;max-width:120px;background:#f1f5f9;border-radius:4px;height:6px;overflow:hidden;">
                 <div style="width:{{ s.pct }}%;background:#22c55e;height:100%;border-radius:4px;"></div>
               </div>
-              <span style="font-family:'JetBrains Mono',monospace;font-weight:700;">{{ s.pct }}%</span>
             </div>
           </td>
           <td>
-            <span class="badge {% if s.pct>=90 %}badge-success{% elif s.pct>=70 %}badge-info{% elif s.pct>=60 %}badge-warning{% else %}badge-danger{% endif %}">
-              {% if s.pct>=90 %}A+{% elif s.pct>=80 %}A{% elif s.pct>=70 %}B{% elif s.pct>=60 %}C{% elif s.pct>=50 %}D{% else %}F{% endif %}
+            <span
+              class="badge {% if s.pct>=90 %}badge-success{% elif s.pct>=70 %}badge-info{% elif s.pct>=60 %}badge-warning{% else %}badge-danger{% endif %}"
+              style="padding:0.3rem 0.75rem;">
+              {% if s.pct>=90 %}A+{% elif s.pct>=80 %}A{% elif s.pct>=70 %}B{% elif s.pct>=60 %}C{% elif s.pct>=50 %}D{%
+              else %}F{% endif %}
             </span>
           </td>
         </tr>
         {% else %}
-        <tr><td colspan="7" style="text-align:center;color:#94a3b8;padding:2rem;">No result data yet.</td></tr>
+        <tr>
+          <td colspan="6" style="text-align:center;color:#94a3b8;padding:5rem 2rem;">
+            <div style="font-size:3rem;margin-bottom:0.75rem;opacity:0.4;">📭</div>
+            <div style="font-size:1.1rem;font-weight:500;">No top performers data available yet.</div>
+          </td>
+        </tr>
         {% endfor %}
       </tbody>
     </table>

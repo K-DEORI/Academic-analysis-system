@@ -4,7 +4,6 @@
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-brand">
-      <span style="font-size:1.5rem;">🏫</span>
       <div>
         <div class="brand-text">SRMS</div>
         <div class="brand-sub">Admin Panel</div>
@@ -81,8 +80,8 @@
     <div class="admin-topbar">
       <div class="topbar-title">{% block page_title %}Dashboard{% endblock %}</div>
       <div class="topbar-actions">
-        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-warning btn-sm">🏠 Dashboard</a>
-        <a href="{{ url_for('admin_logout') }}" class="btn btn-danger btn-sm">⏏ Logout</a>
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm" style="background:#f1f5f9; color:#475569; font-weight:600; padding:0.4rem 1rem; border-radius:6px;">Dashboard</a>
+        <a href="{{ url_for('admin_logout') }}" class="btn btn-sm" style="background:#fff1f2; color:#e11d48; font-weight:600; padding:0.4rem 1rem; border-radius:6px;">Logout</a>
       </div>
     </div>
     {% with msgs = get_flashed_messages(with_categories=true) %}
